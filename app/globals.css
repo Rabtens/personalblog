@@ -1,0 +1,157 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --background: #0F0F0F;
+    --surface: #1A1A2E;
+    --accent-primary: #E94560;
+    --accent-hover: #FF6B6B;
+    --text-primary: #EAEAEA;
+    --text-muted: #8892A4;
+    --border: #2A2A4A;
+  }
+
+  body {
+    @apply bg-[#0F0F0F] text-[#EAEAEA];
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  * {
+    @apply border-[#2A2A4A];
+  }
+
+  input, textarea, select {
+    @apply bg-[#1A1A2E] text-[#EAEAEA] border border-[#2A2A4A] rounded focus:border-[#E94560] focus:ring-2 focus:ring-[#E94560]/20 transition-all;
+  }
+
+  button {
+    @apply transition-all duration-200;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply px-4 py-2 bg-[#E94560] text-[#EAEAEA] rounded font-medium hover:bg-[#FF6B6B] transition-colors duration-200;
+  }
+
+  .btn-secondary {
+    @apply px-4 py-2 border border-[#E94560] text-[#E94560] rounded font-medium hover:bg-[#E94560] hover:text-[#EAEAEA] transition-colors duration-200;
+  }
+
+  .btn-outlined {
+    @apply px-4 py-2 border border-[#2A2A4A] text-[#EAEAEA] rounded font-medium hover:bg-[#1A1A2E] transition-colors duration-200;
+  }
+
+  .card {
+    @apply bg-[#1A1A2E] border border-[#2A2A4A] rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300;
+  }
+
+  .card-hover {
+    @apply hover:bg-[#242442] transition-colors duration-200;
+  }
+
+  .section-title {
+    @apply text-4xl md:text-5xl font-bold text-[#EAEAEA] mb-6;
+    font-family: Playfair Display, serif;
+  }
+
+  .subtitle {
+    @apply text-lg text-[#8892A4] mb-8 max-w-2xl;
+  }
+
+  .glass {
+    @apply bg-[#1A1A2E]/80 backdrop-blur border border-[#2A2A4A]/50;
+  }
+
+  .gradient-text {
+    @apply bg-gradient-to-r from-[#E94560] to-[#FF6B6B] bg-clip-text text-transparent;
+  }
+}
+
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0F0F0F;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #2A2A4A;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #E94560;
+}
+
+/* Selection color */
+::selection {
+  background-color: #E94560;
+  color: #EAEAEA;
+}
+
+/* Loading spinner */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* Pulse animation */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Fade in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Slide up animation */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slideUp {
+  animation: slideUp 0.3s ease-out;
+}
