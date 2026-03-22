@@ -1,11 +1,16 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
+import { useEffect, useState, useRef, Suspense, lazy } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
-import Editor from '@/components/Editor';
 import toast from 'react-hot-toast';
 import { Upload, Loader, Eye } from 'lucide-react';
+
+// Lazy load the heavy Editor component
+const Editor = lazy(() => import('@/components/Editor'));
 
 interface User {
   id: string;
