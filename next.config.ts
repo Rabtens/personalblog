@@ -11,7 +11,7 @@ const nextConfig: NextConfig = {
     resolveAlias: {},
   },
   // Performance optimizations
-  swcMinify: true,
+
   typescript: {
     tsconfigPath: './tsconfig.json',
   },
