@@ -63,19 +63,35 @@ export default function DashboardClient() {
         throw blogsError;
       }
 
+      console.log('Loaded blogs:', blogsData);
+      console.log('Total blogs found:', blogsData?.length);
+      console.log('Drafts:', blogsData?.filter((b: any) => b.status === 'draft').length);
+      console.log('Published:', blogsData?.filter((b: any) => b.status === 'published').length);
+      
       setBlogs(blogsData as Blog[]);
 
-      // Calculate stats from blogs data only (avoid extra queries)
+      // Load stats
       const totalViews = blogsData?.reduce((acc, blog) => acc + (blog.view_count || 0), 0) || 0;
+
+      const { data: likes } = await supabase
+        .from('likes')
+        .select('id', { count: 'exact' })
+        .in('blog_id', blogsData?.map((b) => b.id) || []);
+
+      const { data: comments } = await supabase
+        .from('comments')
+        .select('id', { count: 'exact' })
+        .in('blog_id', blogsData?.map((b) => b.id) || []);
 
       setStats({
         totalViews,
-        totalLikes: 0,
+        totalLikes: likes?.length || 0,
         totalBlogs: blogsData?.length || 0,
-        totalComments: 0,
+        totalComments: comments?.length || 0,
       });
     } catch (error) {
-      // Silent fail - don't interrupt user experience
+      console.error('Error loading dashboard:', error);
+      toast.error('Failed to load dashboard');
     } finally {
       setIsLoading(false);
       setIsRefreshing(false);
@@ -130,15 +146,26 @@ export default function DashboardClient() {
   useEffect(() => {
     const refresh = searchParams.get('refresh');
     if (refresh === 'true' && user) {
-      loadDashboardData(user.id).then(() => {
+      setIsRefreshing(true);
+      // Add delay to ensure database has updated
+      setTimeout(async () => {
+        await loadDashboardData(user.id);
         // Clear the query param
         router.replace('/dashboard');
-      });
+      }, 500);
     }
   }, [searchParams, user, loadDashboardData, router]);
 
-  // Only refresh on explicit user action (manual refresh button)
-  // Removed auto-refresh to prevent lag and glitches
+  // Auto-refresh every 10 seconds to keep drafts up to date
+  useEffect(() => {
+    if (!user) return;
+
+    const interval = setInterval(() => {
+      loadDashboardData(user.id);
+    }, 10000); // 10 seconds
+
+    return () => clearInterval(interval);
+  }, [user, loadDashboardData]);
 
   const handleManualRefresh = async () => {
     if (!user) return;
@@ -162,6 +189,7 @@ export default function DashboardClient() {
       setBlogs((prev) => prev.filter((b) => b.id !== blogId));
       toast.success('Blog deleted successfully');
     } catch (error) {
+      console.error('Delete error:', error);
       toast.error('Failed to delete blog');
     }
   };

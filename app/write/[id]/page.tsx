@@ -241,7 +241,9 @@ export default function EditBlogPage() {
       if (error) throw error;
 
       toast.success('Blog published successfully!');
-      router.push('/dashboard');
+      setTimeout(() => {
+        router.push('/dashboard');
+      }, 1000);
     } catch (error) {
       console.error('Publish error:', error);
       toast.error('Failed to publish blog');
