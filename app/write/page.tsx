@@ -235,12 +235,8 @@ export default function WritePage() {
 
         if (error) throw error;
         setLastSavedTime(new Date());
-        toast.success('Draft updated successfully! Redirecting...');
-        
-        // Navigate to dashboard to see the draft with a shorter delay
-        setTimeout(() => {
-          router.push('/dashboard?refresh=true');
-        }, 800);
+        toast.success('Draft updated successfully!');
+        router.push('/dashboard?refresh=true');
       } else {
         // Create new draft
         const { data, error } = await supabase
@@ -261,12 +257,8 @@ export default function WritePage() {
           console.log('Redirecting to dashboard with refresh flag');
         }
         setLastSavedTime(new Date());
-        toast.success('Draft saved successfully! Redirecting...');
-        
-        // Navigate to dashboard to see the draft with a shorter delay
-        setTimeout(() => {
-          router.push('/dashboard?refresh=true');
-        }, 800);
+        toast.success('Draft saved successfully!');
+        router.push('/dashboard?refresh=true');
       }
     } catch (error: any) {
       console.error('Save error full:', JSON.stringify(error));
@@ -357,9 +349,8 @@ export default function WritePage() {
         setLastSavedTime(new Date());
         toast.success('Blog published successfully!');
         
-        setTimeout(() => {
-          router.push('/dashboard?refresh=true');
-        }, 1200);
+        // Redirect immediately to dashboard
+        router.push('/dashboard?refresh=true');
       } else {
         // Create and publish new blog
         const { data, error } = await supabase
@@ -382,9 +373,8 @@ export default function WritePage() {
         setLastSavedTime(new Date());
         toast.success('Blog published successfully!');
         
-        setTimeout(() => {
-          router.push('/dashboard?refresh=true');
-        }, 1200);
+        // Redirect immediately to dashboard
+        router.push('/dashboard?refresh=true');
       }
     } catch (error: any) {
       console.error('Publish error full:', JSON.stringify(error));

@@ -147,12 +147,11 @@ export default function DashboardClient() {
     const refresh = searchParams.get('refresh');
     if (refresh === 'true' && user) {
       setIsRefreshing(true);
-      // Add delay to ensure database has updated
-      setTimeout(async () => {
-        await loadDashboardData(user.id);
+      // Immediately refresh data after publishing
+      loadDashboardData(user.id).then(() => {
         // Clear the query param
         router.replace('/dashboard');
-      }, 500);
+      });
     }
   }, [searchParams, user, loadDashboardData, router]);
 
