@@ -169,10 +169,9 @@ export default function WritePage() {
 
       if (!error && !hasAutoSavedRef.current) {
         hasAutoSavedRef.current = true;
-        toast.success('Draft auto-saved');
       }
     } catch (error) {
-      console.error('Auto-save error:', error);
+      // Silent catch for auto-save failures
     } finally {
       setIsSaving(false);
     }
@@ -197,29 +196,6 @@ export default function WritePage() {
     setIsSaving(true);
 
     try {
-      // Verify user profile exists
-      const { data: profileData, error: profileError } = await supabase
-        .from('profiles')
-        .select('id')
-        .eq('id', user.id)
-        .single();
-
-      if (profileError || !profileData) {
-        // Profile doesn't exist, create it
-        const { error: createProfileError } = await supabase
-          .from('profiles')
-          .insert({
-            id: user.id,
-            email: user.email,
-            full_name: user.user_metadata?.full_name || '',
-            username: user.user_metadata?.username || user.email?.split('@')[0] || 'user',
-          });
-
-        if (createProfileError) {
-          throw new Error(`Failed to create profile: ${createProfileError.message}`);
-        }
-      }
-
       if (blogId) {
         // Update existing draft
         const { error } = await supabase
@@ -236,7 +212,7 @@ export default function WritePage() {
         if (error) throw error;
         setLastSavedTime(new Date());
         toast.success('Draft updated successfully!');
-        router.push('/dashboard?refresh=true');
+        router.push('/dashboard');
       } else {
         // Create new draft
         const { data, error } = await supabase
@@ -261,19 +237,11 @@ export default function WritePage() {
         router.push('/dashboard?refresh=true');
       }
     } catch (error: any) {
-      console.error('Save error full:', JSON.stringify(error));
-      
       let errorMessage = 'Failed to save draft';
       if (error?.message) {
         errorMessage = error.message;
-      } else if (error?.error_description) {
-        errorMessage = error.error_description;
-      } else if (error?.details) {
-        errorMessage = error.details;
       }
-      
       toast.error(errorMessage);
-    } finally {
       setIsSaving(false);
     }
   };
@@ -297,37 +265,13 @@ export default function WritePage() {
     setIsPublishing(true);
 
     try {
-      // Verify user profile exists
-      const { data: profileData, error: profileError } = await supabase
-        .from('profiles')
-        .select('id')
-        .eq('id', user.id)
-        .single();
-
-      if (profileError || !profileData) {
-        // Profile doesn't exist, create it
-        const { error: createProfileError } = await supabase
-          .from('profiles')
-          .insert({
-            id: user.id,
-            email: user.email,
-            full_name: user.user_metadata?.full_name || '',
-            username: user.user_metadata?.username || user.email?.split('@')[0] || 'user',
-          });
-
-        if (createProfileError) {
-          throw new Error(`Failed to create profile: ${createProfileError.message}`);
-        }
-      }
-
       let coverUrl = null;
 
       if (coverImage) {
         coverUrl = await uploadCoverImage();
         if (!coverUrl) {
-          toast.error('Failed to upload cover image. Please try again.');
-          setIsPublishing(false);
-          return;
+          toast.error('Failed to upload cover image');
+          throw new Error('Cover image upload failed');
         }
       }
 
@@ -346,11 +290,10 @@ export default function WritePage() {
           .eq('user_id', user.id);
 
         if (error) throw error;
-        setLastSavedTime(new Date());
         toast.success('Blog published successfully!');
         
         // Redirect immediately to dashboard
-        router.push('/dashboard?refresh=true');
+        router.push('/dashboard');
       } else {
         // Create and publish new blog
         const { data, error } = await supabase
@@ -368,28 +311,19 @@ export default function WritePage() {
         if (error) throw error;
         if (data) {
           setBlogId(data.id);
-          console.log('Blog published with ID:', data.id);
         }
         setLastSavedTime(new Date());
         toast.success('Blog published successfully!');
         
         // Redirect immediately to dashboard
-        router.push('/dashboard?refresh=true');
+        router.push('/dashboard');
       }
     } catch (error: any) {
-      console.error('Publish error full:', JSON.stringify(error));
-      
       let errorMessage = 'Failed to publish blog';
       if (error?.message) {
         errorMessage = error.message;
-      } else if (error?.error_description) {
-        errorMessage = error.error_description;
-      } else if (error?.details) {
-        errorMessage = error.details;
       }
-      
       toast.error(errorMessage);
-    } finally {
       setIsPublishing(false);
     }
   };
