@@ -66,10 +66,11 @@ export default function SigninPage() {
 
       toast.success('Signed in successfully!');
       
-      // Redirect immediately without delay
+      // Redirect immediately to dashboard
       router.push('/dashboard');
     } catch (error) {
       toast.error('An error occurred. Please try again.');
+    } finally {
       setIsLoading(false);
     }
   };
