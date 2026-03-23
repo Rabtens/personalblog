@@ -240,11 +240,20 @@ export default function EditBlogPage() {
 
       if (error) throw error;
 
+      // Wait for database to process before redirecting
+      const wordCount = content.split(/\s+/).length;
+      const processingDelay = Math.min(wordCount > 3000 ? 1500 : 800, 2000);
+      await new Promise(resolve => setTimeout(resolve, processingDelay));
+      
       toast.success('Blog published successfully!');
       router.push('/dashboard');
     } catch (error) {
+      let errorMessage = 'Failed to publish blog';
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      }
       console.error('Publish error:', error);
-      toast.error('Failed to publish blog');
+      toast.error(errorMessage);
     } finally {
       setIsPublishing(false);
     }

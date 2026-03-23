@@ -73,7 +73,6 @@ export default function SignupPage() {
 
       if (existingUser) {
         setErrors({ username: 'Username already taken' });
-        setIsLoading(false);
         return;
       }
 
@@ -92,18 +91,20 @@ export default function SignupPage() {
 
       if (authError) {
         toast.error(authError.message);
-        setIsLoading(false);
         return;
       }
 
       if (!authData.user) {
         toast.error('Failed to create account');
-        setIsLoading(false);
         return;
       }
 
-      // Show success message and redirect immediately
-      toast.success('Account created! Redirecting...');
+      // Wait for profile to be created via database trigger
+      await new Promise(resolve => setTimeout(resolve, 800));
+
+      // Show success message and redirect
+      toast.success('Account created! Redirecting to sign in...');
+      await new Promise(resolve => setTimeout(resolve, 500));
       router.push('/auth/signin');
     } catch (error) {
       if (error instanceof z.ZodError) {

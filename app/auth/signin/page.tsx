@@ -60,13 +60,15 @@ export default function SigninPage() {
         } else {
           toast.error(error.message);
         }
-        setIsLoading(false);
         return;
       }
 
       toast.success('Signed in successfully!');
       
-      // Redirect immediately to dashboard
+      // Wait briefly for session to be established
+      await new Promise(resolve => setTimeout(resolve, 300));
+      
+      // Redirect to dashboard
       router.push('/dashboard');
     } catch (error) {
       toast.error('An error occurred. Please try again.');

@@ -229,11 +229,10 @@ export default function WritePage() {
         if (error) throw error;
         if (data) {
           setBlogId(data.id);
-          console.log('Draft created with ID:', data.id);
-          console.log('Redirecting to dashboard with refresh flag');
         }
         setLastSavedTime(new Date());
         toast.success('Draft saved successfully!');
+        await new Promise(resolve => setTimeout(resolve, 300));
         router.push('/dashboard?refresh=true');
       }
     } catch (error: any) {
@@ -242,6 +241,7 @@ export default function WritePage() {
         errorMessage = error.message;
       }
       toast.error(errorMessage);
+    } finally {
       setIsSaving(false);
     }
   };
@@ -290,9 +290,13 @@ export default function WritePage() {
           .eq('user_id', user.id);
 
         if (error) throw error;
-        toast.success('Blog published successfully!');
         
-        // Redirect immediately to dashboard
+        // Wait for database to fully process large content
+        const wordCount = content.split(/\s+/).length;
+        const processingDelay = Math.min(wordCount > 3000 ? 1500 : 800, 2000);
+        await new Promise(resolve => setTimeout(resolve, processingDelay));
+        
+        toast.success('Blog published successfully!');
         router.push('/dashboard');
       } else {
         // Create and publish new blog
@@ -309,13 +313,18 @@ export default function WritePage() {
           .single();
 
         if (error) throw error;
+        
         if (data) {
           setBlogId(data.id);
         }
         setLastSavedTime(new Date());
-        toast.success('Blog published successfully!');
         
-        // Redirect immediately to dashboard
+        // Wait for database to fully process large content
+        const wordCount = content.split(/\s+/).length;
+        const processingDelay = Math.min(wordCount > 3000 ? 1500 : 800, 2000);
+        await new Promise(resolve => setTimeout(resolve, processingDelay));
+        
+        toast.success('Blog published successfully!');
         router.push('/dashboard');
       }
     } catch (error: any) {
@@ -324,6 +333,7 @@ export default function WritePage() {
         errorMessage = error.message;
       }
       toast.error(errorMessage);
+    } finally {
       setIsPublishing(false);
     }
   };
