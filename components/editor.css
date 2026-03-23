@@ -1,16 +1,21 @@
-/* Editor content styling */
-.editor-content {
+/* Editor content styling and Blog display styling - shared */
+.editor-content,
+.blog-display {
   outline: none;
 }
 
-.editor-content p {
+.editor-content p,
+.blog-display p {
   margin-bottom: 1rem;
   line-height: 1.6;
 }
 
 .editor-content h1,
 .editor-content h2,
-.editor-content h3 {
+.editor-content h3,
+.blog-display h1,
+.blog-display h2,
+.blog-display h3 {
   font-family: var(--font-playfair);
   font-weight: 700;
   margin-top: 1.5rem;
@@ -18,19 +23,23 @@
   line-height: 1.3;
 }
 
-.editor-content h1 {
+.editor-content h1,
+.blog-display h1 {
   font-size: 2rem;
 }
 
-.editor-content h2 {
+.editor-content h2,
+.blog-display h2 {
   font-size: 1.5rem;
 }
 
-.editor-content h3 {
+.editor-content h3,
+.blog-display h3 {
   font-size: 1.25rem;
 }
 
-.editor-content blockquote {
+.editor-content blockquote,
+.blog-display blockquote {
   border-left: 4px solid #E94560;
   padding-left: 1rem;
   margin-left: 0;
@@ -40,7 +49,8 @@
   margin-bottom: 1rem;
 }
 
-.editor-content code {
+.editor-content code,
+.blog-display code {
   background-color: #1A1A2E;
   padding: 0.2em 0.4em;
   border-radius: 3px;
@@ -49,7 +59,8 @@
   color: #FF6B6B;
 }
 
-.editor-content pre {
+.editor-content pre,
+.blog-display pre {
   background-color: #1A1A2E;
   border: 1px solid #2A2A4A;
   border-radius: 6px;
@@ -58,70 +69,85 @@
   overflow-x: auto;
 }
 
-.editor-content pre code {
+.editor-content pre code,
+.blog-display pre code {
   background: none;
   padding: 0;
   color: #E94560;
 }
 
 .editor-content ul,
-.editor-content ol {
+.editor-content ol,
+.blog-display ul,
+.blog-display ol {
   margin-left: 1.5rem;
   margin-bottom: 1rem;
 }
 
 .editor-content ul li,
-.editor-content ol li {
+.editor-content ol li,
+.blog-display ul li,
+.blog-display ol li {
   margin-bottom: 0.5rem;
   line-height: 1.6;
 }
 
-.editor-content ul {
+.editor-content ul,
+.blog-display ul {
   list-style-type: disc;
 }
 
-.editor-content ol {
+.editor-content ol,
+.blog-display ol {
   list-style-type: decimal;
 }
 
-.editor-content hr {
+.editor-content hr,
+.blog-display hr {
   border: none;
   border-top: 2px solid #2A2A4A;
   margin: 2rem 0;
 }
 
-.editor-content em {
+.editor-content em,
+.blog-display em {
   font-style: italic;
 }
 
-.editor-content strong {
+.editor-content strong,
+.blog-display strong {
   font-weight: 700;
 }
 
-.editor-content u {
+.editor-content u,
+.blog-display u {
   text-decoration: underline;
   text-decoration-color: #E94560;
   text-underline-offset: 2px;
 }
 
-.editor-content s {
+.editor-content s,
+.blog-display s {
   text-decoration: line-through;
   text-decoration-color: #8892A4;
 }
 
-.editor-content a {
+.editor-content a,
+.blog-display a {
   color: #E94560;
   text-decoration: underline;
   cursor: pointer;
   transition: color 0.2s;
 }
 
-.editor-content a:hover {
+.editor-content a:hover,
+.blog-display a:hover {
   color: #FF6B6B;
 }
 
 /* Highlight mark styling */
-.editor-content mark {
+.editor-content mark,
+.blog-display mark {
   background-color: rgba(233, 69, 96, 0.2);
   color: inherit;
   padding: 0.1em 0.2em;
@@ -129,7 +155,8 @@
 }
 
 /* Image styling */
-.editor-content img {
+.editor-content img,
+.blog-display img {
   max-width: 100%;
   height: auto;
   border-radius: 6px;
@@ -138,27 +165,32 @@
 }
 
 /* Table styling */
-.editor-content table {
+.editor-content table,
+.blog-display table {
   border-collapse: collapse;
   width: 100%;
   margin: 1rem 0;
 }
 
 .editor-content table td,
-.editor-content table th {
+.editor-content table th,
+.blog-display table td,
+.blog-display table th {
   border: 1px solid #2A2A4A;
   padding: 0.75rem;
   text-align: left;
   min-width: 3rem;
 }
 
-.editor-content table th {
+.editor-content table th,
+.blog-display table th {
   background-color: #1A1A2E;
   font-weight: 700;
   color: #E94560;
 }
 
-.editor-content table tr:hover {
+.editor-content table tr:hover,
+.blog-display table tr:hover {
   background-color: #1A1A2E;
 }
 

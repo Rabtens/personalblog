@@ -382,7 +382,7 @@ export default function WritePage() {
           </div>
 
           <div
-            className="prose prose-invert max-w-none"
+            className="blog-display prose prose-invert max-w-none"
             dangerouslySetInnerHTML={{ __html: content }}
           />
         </div>

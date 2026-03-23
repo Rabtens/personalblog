@@ -369,7 +369,7 @@ export default function BlogPage() {
 
         {/* Content */}
         <div
-          className="prose prose-invert max-w-none mb-12 text-[#EAEAEA]"
+          className="blog-display prose prose-invert max-w-none mb-12 text-[#EAEAEA]"
           dangerouslySetInnerHTML={{ __html: blog.content }}
         />
 

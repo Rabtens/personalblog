@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Playfair_Display, Inter } from 'next/font/google';
 import './globals.css';
+import '@/components/editor.css';
 import Navbar from '@/components/Navbar';
 import { Toaster } from 'react-hot-toast';
 
