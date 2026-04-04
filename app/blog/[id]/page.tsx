@@ -71,6 +71,9 @@ export default function BlogPage() {
   const [isLoadingBlog, setIsLoadingBlog] = useState(true);
   const [isSubmittingComment, setIsSubmittingComment] = useState(false);
   const [isLikingBlog, setIsLikingBlog] = useState(false);
+  const [commentPage, setCommentPage] = useState(0);
+  const [hasMoreComments, setHasMoreComments] = useState(false);
+  const COMMENTS_PER_PAGE = 5;
 
   useEffect(() => {
     const loadPage = async () => {
@@ -116,19 +119,25 @@ export default function BlogPage() {
           return;
         }
 
-        // Load comments
-        const { data: commentsData } = await supabase
+        // Load comments with pagination
+        const { data: commentsData, error: commentsError } = await supabase
           .from('comments')
           .select(
             `
             *,
             profiles:user_id(id, username, full_name, avatar_url)
-          `
+          `,
+            { count: 'exact' }
           )
           .eq('blog_id', blogId)
-          .order('created_at', { ascending: false });
+          .order('created_at', { ascending: false })
+          .range(0, COMMENTS_PER_PAGE - 1);
 
-        setComments((commentsData || []) as Comment[]);
+        if (commentsError) throw commentsError;
+        
+        const typedComments = (commentsData || []) as Comment[];
+        setComments(typedComments);
+        setHasMoreComments((commentsData?.length || 0) >= COMMENTS_PER_PAGE);
 
         // Load likes
         const { data: likesData } = await supabase
@@ -244,6 +253,36 @@ export default function BlogPage() {
     }
   };
 
+  const handleLoadMoreComments = async () => {
+    try {
+      const nextPage = commentPage + 1;
+      const { data: moreComments } = await supabase
+        .from('comments')
+        .select(
+          `
+          *,
+          profiles:user_id(id, username, full_name, avatar_url)
+        `
+        )
+        .eq('blog_id', blogId)
+        .order('created_at', { ascending: false })
+        .range(
+          nextPage * COMMENTS_PER_PAGE,
+          (nextPage + 1) * COMMENTS_PER_PAGE - 1
+        );
+
+      const typedMoreComments = (moreComments || []) as Comment[];
+      setComments((prev) => [...prev, ...typedMoreComments]);
+      setCommentPage(nextPage);
+      setHasMoreComments(
+        (moreComments?.length || 0) >= COMMENTS_PER_PAGE
+      );
+    } catch (error) {
+      console.error('Load more error:', error);
+      toast.error('Failed to load more comments');
+    }
+  };
+
   const handleDeleteComment = async (commentId: string) => {
     if (
       !confirm('Are you sure you want to delete this comment?')
@@ -317,20 +356,21 @@ export default function BlogPage() {
     <div className="min-h-screen bg-[#0F0F0F]">
       {/* Cover Image */}
       {blog.cover_image_url && (
-        <div className="relative w-full h-96 md:h-[500px] overflow-hidden">
+        <div className="relative w-full h-64 sm:h-80 md:h-96 lg:h-[500px] overflow-hidden">
           <img
             src={blog.cover_image_url}
             alt={blog.title}
             className="w-full h-full object-cover"
+            loading="lazy"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#0F0F0F] to-transparent" />
         </div>
       )}
 
       {/* Main Content */}
-      <article className="max-w-3xl mx-auto px-4 py-12">
+      <article className="max-w-3xl mx-auto px-3 sm:px-4 md:px-6 py-8 sm:py-10 md:py-12">
         {/* Title */}
-        <h1 className="text-5xl md:text-6xl font-playfair font-bold text-[#EAEAEA] mb-6 leading-tight">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-playfair font-bold text-[#EAEAEA] mb-6 leading-tight">
           {blog.title}
         </h1>
 
@@ -505,6 +545,14 @@ export default function BlogPage() {
                   </div>
                 </div>
               ))}
+              {hasMoreComments && (
+                <button
+                  onClick={handleLoadMoreComments}
+                  className="w-full mt-6 py-3 px-4 border border-[#2A2A4A] text-[#E94560] rounded font-medium hover:bg-[#1A1A2E] transition-colors"
+                >
+                  Load More Comments
+                </button>
+              )}
             </div>
           )}
         </div>

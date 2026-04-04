@@ -112,9 +112,9 @@ export default function Navbar() {
 
   if (isLoading) {
     return (
-      <nav className="sticky top-0 z-50 bg-[#0F0F0F]/95 backdrop-blur border-b border-[#2A2A4A] px-6 py-4">
+      <nav className="sticky top-0 z-50 bg-[#0F0F0F]/95 backdrop-blur border-b border-[#2A2A4A] px-3 sm:px-4 md:px-6 py-3 sm:py-4">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <div className="text-2xl font-playfair font-bold gradient-text">
+          <div className="text-lg sm:text-xl md:text-2xl font-playfair font-bold gradient-text">
             📝 Blog_lhabsa
           </div>
         </div>
@@ -124,18 +124,18 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="sticky top-0 z-50 bg-[#0F0F0F]/95 backdrop-blur border-b border-[#2A2A4A] px-6 py-4">
+      <nav className="sticky top-0 z-50 bg-[#0F0F0F]/95 backdrop-blur border-b border-[#2A2A4A] px-3 sm:px-4 md:px-6 py-3 sm:py-4">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           {/* Logo */}
           <Link
             href="/"
-            className="text-2xl font-playfair font-bold gradient-text hover:opacity-80 transition-opacity"
+            className="text-lg sm:text-xl md:text-2xl font-playfair font-bold gradient-text hover:opacity-80 transition-opacity"
           >
             📝 Blog_lhabsa
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex gap-8 items-center">
+          <div className="hidden md:flex gap-6 lg:gap-8 items-center text-sm md:text-base">
             <Link
               href="/"
               className="text-[#EAEAEA] hover:text-[#E94560] transition-colors"

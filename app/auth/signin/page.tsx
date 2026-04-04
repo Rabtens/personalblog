@@ -124,12 +124,13 @@ export default function SigninPage() {
               <label className="text-sm font-medium text-[#EAEAEA]">
                 Password
               </label>
-              <Link
-                href="/auth/forgot-password"
-                className="text-xs text-[#E94560] hover:text-[#FF6B6B] transition-colors"
+              <button
+                type="button"
+                disabled
+                className="text-xs text-[#888] cursor-not-allowed"
               >
                 Forgot password?
-              </Link>
+              </button>
             </div>
             <div className="relative">
               <Lock
